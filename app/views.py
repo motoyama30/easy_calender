@@ -1,3 +1,6 @@
+from django.core import serializers
+from django.db.models import Q
+from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -5,7 +8,6 @@ from django.urls import reverse_lazy
 from .forms import CreateSuggestionForm
 from .models import Schedule, Suggestion
 from . import mixins
-
 
 
 class MonthCalendar(mixins.MonthCalendarMixin, ListView):
@@ -20,7 +22,6 @@ class MonthCalendar(mixins.MonthCalendarMixin, ListView):
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
         return context
-
 
     def get_queryset(self):
         day = self.get_current_month()
@@ -98,6 +99,39 @@ class CreateSchedule(CreateView):
         initial["date"] = self.kwargs.get("date")
         return initial
 
+    def form_valid(self, form):
+        # 重複する予定があるか検索
+        new_date = form.cleaned_data.get("date")
+        new_start_time = form.cleaned_data.get("start_time")
+        new_end_time = form.cleaned_data.get("end_time")
+        overlap_item = Schedule.objects.filter(
+            Q(
+                date=new_date,
+                start_time__range=(new_start_time, new_end_time)
+            ) | Q(
+                date=new_date, start_time__gte=new_end_time
+            ) | Q(
+                date=new_date, end_time__lte=new_start_time
+            )
+        )
+        if (
+            self.request.POST.get('next') == "confirm"
+            and len(overlap_item) > 0
+        ):
+            context = {"form": form}
+            return render(self.request, 'app/create_alert.html', context)
+        else:
+            return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        suggestions = Suggestion.objects.all()
+        suggestions_json = serializers.serialize("json", suggestions)
+        context.update({
+            "suggestions_json": suggestions_json,
+        })
+        return context
+
 
 class UpdateSchedule(UpdateView):
     template_name: str = 'app/update.html'
@@ -109,7 +143,7 @@ class UpdateSchedule(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({"pk":self.kwargs.get("pk")})
+        context.update({"pk": self.kwargs.get("pk")})
         return context
 
 

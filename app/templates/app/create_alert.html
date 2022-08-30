@@ -1,0 +1,27 @@
+{% extends 'app/base.html' %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+{% endblock %}
+
+{% block content %}
+<p>同じ時間に予定があります。<br>本当にこの予定を追加しますか？</p>
+
+
+<form action="" method="POST">
+  {% csrf_token %}
+
+  {% for field in form %}
+    {{ field.as_hidden }}
+  {% endfor %}
+  <button type="submit" name="next" value="create">追加する</button>
+  <input type="button" value="戻る" onClick="javascript:history.go(-1);">
+
+</form>
+
+{% endblock content %}
+
+{% block extrajs%}
+
+{% endblock %}
