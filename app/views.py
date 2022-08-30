@@ -7,7 +7,9 @@ from .models import Schedule, Suggestion
 from . import mixins
 
 
+
 class MonthCalendar(mixins.MonthCalendarMixin, ListView):
+
     model = Schedule
     template_name: str = 'app/month.html'
     ordering = 'date'
@@ -18,6 +20,7 @@ class MonthCalendar(mixins.MonthCalendarMixin, ListView):
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
         return context
+
 
     def get_queryset(self):
         day = self.get_current_month()
@@ -102,9 +105,20 @@ class UpdateSchedule(UpdateView):
     )
     success_url = reverse_lazy("app:month_calendar")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({"pk":self.kwargs.get("pk")})
+        return context
+
 
 class CreateSuggestion(CreateView):
     model = Suggestion
     form_class = CreateSuggestionForm
     template_name: str = 'app/create_suggestion.html'
     success_url = reverse_lazy('app:month_calendar')
+
+
+class DeleteSchedule(DeleteView):
+    template_name: str = "app/delete.html"
+    model = Schedule
+    success_url = reverse_lazy("app:month_calendar")
