@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+    <a href="{% url 'app:day_with_schedule' day_previous.year day_previous.month  day_previous.day %}">{{ day_previous | date:"Y年m月d日" }}</a><!-- {{ day_previous | date:"Y年m月d日" }} -->
+    <!--{{ current_day | date:"Y年m月d日" }}-->
+    <a href="{% url 'app:day_with_schedule' day_next.year day_next.month  day_next.day %}">{{ day_next | date:"Y年m月d日" }}</a><!--{{ day_next | date:"Y年m月d日" }}-->
+    <p style="text-align: right">
+        <a href="{% url 'app:month_calendar_month' current_day.year current_day.month %}">月</a>
+    </p>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th colspan="2">{{ current_day | date:"m月d日" }}({{ current_week_name }})</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                {{ s.start_time }} - {{ s.end_time }}
+            </td>
+            <td>
+                -
+            </td>
+            {% for schedules in day_schedules.values %}
+                <td>
+                    {% for s in schedules %}
+                        {{ s.title }}<br>
+                        {{ s.memo }}<br>
+                        {{ s.description | linebreaks }}
+                    {% endfor %}
+                </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+    
+{% endblock %}

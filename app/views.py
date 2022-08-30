@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
@@ -26,6 +26,53 @@ class MonthCalendar(mixins.MonthCalendarMixin, ListView):
         return queryset
 
 
+class WeekCalendar(mixins.WeekCalendarMixin, TemplateView):
+    """週間カレンダーを表示するビュー"""
+    template_name = 'app/week.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendar_context = self.get_week_calendar()
+        context.update(calendar_context)
+        return context
+
+
+class WeekWithScheduleCalendar(mixins.WeekWithScheduleMixin, TemplateView):
+    """スケジュール付きの週間カレンダーを表示するビュー"""
+    template_name = 'app/week_with_schedule.html'
+    model = Schedule
+    date_field = 'date'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendar_context = self.get_week_calendar()
+        context.update(calendar_context)
+        return context
+
+
+class DayCalendar(mixins.DayCalendarMixin, TemplateView):
+    template_name: str = 'app/day.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendar_context = self.get_day_calendar()
+        context.update(calendar_context)
+        return context
+
+
+class DayWithScheduleCalendar(mixins.DayWithScheduleMixin, TemplateView):
+    """スケジュール付きの週間カレンダーを表示するビュー"""
+    template_name = 'app/day_with_schedule.html'
+    model = Schedule
+    date_field = 'date'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendar_context = self.get_day_calendar()
+        context.update(calendar_context)
+        return context
+
+
 class CreateSchedule(CreateView):
     template_name: str = 'app/create.html'
     model = Schedule
@@ -46,7 +93,7 @@ class UpdateSchedule(UpdateView):
     fields = (
         "title", "memo", "start_time", "end_time", "date", "is_confirmed"
     )
-    # success_url = reverse_lazy("app:month_calendar")
+    success_url = reverse_lazy("app:month_calendar")
 
 
 class CreateSuggestion(CreateView):
