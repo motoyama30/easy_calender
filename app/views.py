@@ -80,7 +80,7 @@ class DayWithScheduleCalendar(mixins.DayWithScheduleMixin, ListView):
     def get_queryset(self):
         day = self.get_day()
         day = str(day).split("-")[2]
-        queryset = Schedule.objects.filter(date__day=day)
+        queryset = Schedule.objects.filter(date__day=day).order_by('start_time')
         print(queryset)
         return queryset
 
