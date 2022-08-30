@@ -1,0 +1,59 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/create_suggestion.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h1 class="col-sm-12 title">候補を追加</h1>
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="col-sm-12">
+      <label for="id_title" class="form-label">タイトル</label>
+        {{form.title}}
+        {{form.title.errors}}
+    </div>
+    <div class="col-sm-12 row">
+      <div class="col-sm-4">
+        <label for="id_start_time" class="form-label">開始時間</label>
+        {{form.start_time}}
+        {{form.start_time.errors}}
+      </div>
+      <div class="col-sm-4">
+        <label for="id_end_time" class="form-label">終了時間</label>
+        {{form.end_time}}
+        {{form.end_time.errors}}
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <label for="id_memo" class="form-label">詳細</label>
+      {{form.memo}}
+      {{form.memo.errors}}
+    </div>
+    <div class="col-sm-12">
+      <button type="submit" class="btn btn-primary col-sm-5 submit-btn">追加する</button>
+    </div>
+  </form>
+
+</div>
+{% endblock content %}
+
+{% block extrajs %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.js"></script>
+    <script>
+        $(function () {
+            // timedropper
+            $("#id_start_time").timeDropper({
+                format: "H:mm",
+                setCurrentTime: false,
+            });
+            $("#id_end_time").timeDropper({
+                format: "H:mm",
+                setCurrentTime: false,
+            });
+        });
+    </script>
+{% endblock %}

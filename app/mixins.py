@@ -1,5 +1,6 @@
 import calendar
 import datetime
+import locale
 from collections import deque
 
 
@@ -48,8 +49,10 @@ class MonthCalendarMixin(BaseCalendarMixin):
         year = self.kwargs.get('year')
         if month and year:
             month = datetime.date(year=int(year), month=int(month), day=1)
+            print('bb', month)
         else:
             month = datetime.date.today().replace(day=1)
+            print("aa:", month)
         return month
 
     def get_month_calendar(self):
@@ -65,3 +68,118 @@ class MonthCalendarMixin(BaseCalendarMixin):
             'week_names': self.get_week_names(),
         }
         return calendar_data
+
+
+class WeekCalendarMixin(BaseCalendarMixin):
+    def get_week_days(self):
+        """その週の日を全て返す"""
+        month = self.kwargs.get('month')
+        year = self.kwargs.get('year')
+        day = self.kwargs.get('day')
+        if month and year and day:
+            date = datetime.date(year=int(year), month=int(month), day=int(day))
+        else:
+            date = datetime.date.today()
+
+        for week in self._calendar.monthdatescalendar(date.year, date.month):
+            if date in week:  # 週ごとに取り出され、中身は全てdatetime.date型。該当の日が含まれていれば、それが今回表示すべき週です
+                return week
+    
+    def get_week_calendar(self):
+        """週間カレンダー情報の入った辞書を返す"""
+        self.setup_calendar()
+        days = self.get_week_days()
+        first = days[0]
+        last = days[-1]
+        calendar_data = {
+            'now': datetime.date.today(),
+            'week_days': days,
+            'week_previous': first - datetime.timedelta(days=7),
+            'week_next': first + datetime.timedelta(days=7),
+            'week_names': self.get_week_names(),
+            'week_first': first,
+            'week_last': last,
+        }
+        return calendar_data
+
+
+class WeekWithScheduleMixin(WeekCalendarMixin):
+    """スケジュール付きの、週間カレンダーを提供するMixin"""
+
+    def get_week_schedules(self, start, end, days):
+        """それぞれの日とスケジュールを返す"""
+        lookup = {
+            # '例えば、date__range: (1日, 31日)'を動的に作る
+            '{}__range'.format(self.date_field): (start, end)
+        }
+        # 例えば、Schedule.objects.filter(date__range=(1日, 31日)) になる
+        queryset = self.model.objects.filter(**lookup)
+
+        # {1日のdatetime: 1日のスケジュール全て, 2日のdatetime: 2日の全て...}のような辞書を作る
+        day_schedules = {day: [] for day in days}
+        for schedule in queryset:
+            schedule_date = getattr(schedule, self.date_field)
+            day_schedules[schedule_date].append(schedule)
+        return day_schedules
+
+    def get_week_calendar(self):
+        calendar_context = super().get_week_calendar()
+        calendar_context['week_day_schedules'] = self.get_week_schedules(
+            calendar_context['week_first'],
+            calendar_context['week_last'],
+            calendar_context['week_days']
+        )
+        return calendar_context
+
+
+class DayCalendarMixin(BaseCalendarMixin):
+    def get_day(self):
+        month = self.kwargs.get('month')
+        year = self.kwargs.get('year')
+        day = self.kwargs.get('day')
+        if month and year and day:
+            date = datetime.date(year=int(year), month=int(month), day=int(day))
+        else:
+            date = datetime.date.today()
+
+        return date
+    
+    def get_day_calendar(self):
+        """1日カレンダー情報の入った辞書を返す"""
+        self.setup_calendar()
+        current_day = self.get_day()
+        # locale.setlocale(locale.LC_TIME, 'ja_JP.UTF-8')
+        calendar_data = {
+            'current_day': current_day,
+            'day_previous': current_day - datetime.timedelta(days=1),
+            'day_next': current_day + datetime.timedelta(days=1),
+            'current_week_name': current_day.strftime('%a')
+        }
+        return calendar_data
+
+
+class DayWithScheduleMixin(DayCalendarMixin):
+    """スケジュール付きの、週間カレンダーを提供するMixin"""
+
+    def get_day_schedules(self, day):
+        """それぞれの日とスケジュールを返す"""
+        lookup = {
+            # '例えば、date__range: (1日, 31日)'を動的に作る
+            '{}__range'.format(self.date_field): (day)
+        }
+        # 例えば、Schedule.objects.filter(date__range=(1日, 31日)) になる
+        queryset = self.model.objects.filter(**lookup)
+
+        # {1日のdatetime: 1日のスケジュール全て, 2日のdatetime: 2日の全て...}のような辞書を作る
+        day_schedules = {day: []}
+        for schedule in queryset:
+            schedule_date = getattr(schedule, self.date_field)
+            day_schedules[schedule_date].append(schedule)
+        return day_schedules
+
+    def get_week_calendar(self):
+        calendar_context = super().get_week_calendar()
+        calendar_context['day_schedules'] = self.get_day_schedules(
+            calendar_context['day']
+        )
+        return calendar_context
