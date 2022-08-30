@@ -17,34 +17,34 @@
 
 {% block extrajs%}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.js"></script>
-    <script>
-        $(function () {
-            let dateFormat = 'yy-mm-dd';
-            $("#id_date").datepicker({
-              dateFormat: dateFormat
-            });
-            $("#id_start_time").timeDropper({
-                format: "H:mm",
-                setCurrentTime: false,
-            });
-            $("#id_end_time").timeDropper({
-                format: "H:mm",
-                setCurrentTime: false,
-            });
-        });
-    </script>
-    <script>
-      // 候補を選択したら他のフィールドにも値を設定
-      const suggestions = JSON.parse('{{ suggestions_json|safe }}');
-      const titleField = document.getElementById("id_title");
-
-      titleField.addEventListener("change", function() {
-        const chosenSuggestion = titleField.value;
-        const chosen = suggestions.filter((item) => item.pk == chosenSuggestion)[0];
-        document.getElementById("id_start_time").value = chosen.fields.start_time;
-        document.getElementById("id_end_time").value = chosen.fields.end_time;
-        document.getElementById("id_memo").value = chosen.fields.memo ?? chosen.fields.memo;
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.js"></script>
+  <script>
+      $(function () {
+          let dateFormat = 'yy-mm-dd';
+          $("#id_date").datepicker({
+            dateFormat: dateFormat
+          });
+          $("#id_start_time").timeDropper({
+              format: "H:mm",
+              setCurrentTime: false,
+          });
+          $("#id_end_time").timeDropper({
+              format: "H:mm",
+              setCurrentTime: false,
+          });
       });
-    </script>
+  </script>
+  <script>
+    // 候補を選択したら他のフィールドにも値を設定
+    const suggestions = JSON.parse('{{ suggestions_json|safe }}');
+    const titleField = document.getElementById("id_title");
+
+    titleField.addEventListener("change", function() {
+      const chosenSuggestion = titleField.value;
+      const chosen = suggestions.filter((item) => item.pk == chosenSuggestion)[0];
+      document.getElementById("id_start_time").value = chosen.fields.start_time;
+      document.getElementById("id_end_time").value = chosen.fields.end_time;
+      document.getElementById("id_memo").value = chosen.fields.memo ?? chosen.fields.memo;
+    });
+  </script>
 {% endblock %}
