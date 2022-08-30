@@ -1,0 +1,23 @@
+{% extends "app/base.html" %}
+{% block content %}
+<form action="" method="POST">{% csrf_token %}
+
+    <p id="title">タイトル</p>
+    {{ form.title }}
+    <p>メモ</p>
+    {{ form.memo }}
+    <p>日付</p>
+    {{ form.date }}
+    <p>開始時刻</p>
+    {{ form.start_time }}
+    <p>終了時刻</p>
+    {{ form.end_time }}
+    <p>確定してるか {{ form.is_confirmed }} </p>
+    
+    <input type="submit" value="更新">
+    <a href="{% url 'app:delete' pk %}" >削除</a>
+
+</form>
+
+
+{% endblock content %}
