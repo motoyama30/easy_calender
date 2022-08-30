@@ -1,6 +1,5 @@
 import calendar
 import datetime
-import locale
 from collections import deque
 
 
@@ -49,10 +48,8 @@ class MonthCalendarMixin(BaseCalendarMixin):
         year = self.kwargs.get('year')
         if month and year:
             month = datetime.date(year=int(year), month=int(month), day=1)
-            print('bb', month)
         else:
             month = datetime.date.today().replace(day=1)
-            print("aa:", month)
         return month
 
     def get_month_calendar(self):
@@ -77,14 +74,17 @@ class WeekCalendarMixin(BaseCalendarMixin):
         year = self.kwargs.get('year')
         day = self.kwargs.get('day')
         if month and year and day:
-            date = datetime.date(year=int(year), month=int(month), day=int(day))
+            date = datetime.date(
+                year=int(year), month=int(month), day=int(day)
+            )
         else:
             date = datetime.date.today()
 
         for week in self._calendar.monthdatescalendar(date.year, date.month):
-            if date in week:  # 週ごとに取り出され、中身は全てdatetime.date型。該当の日が含まれていれば、それが今回表示すべき週です
+            if date in week:
+                # 週ごとに取り出され、中身は全てdatetime.date型。該当の日が含まれていれば、それが今回表示すべき週
                 return week
-    
+
     def get_week_calendar(self):
         """週間カレンダー情報の入った辞書を返す"""
         self.setup_calendar()
@@ -138,12 +138,15 @@ class DayCalendarMixin(BaseCalendarMixin):
         year = self.kwargs.get('year')
         day = self.kwargs.get('day')
         if month and year and day:
-            date = datetime.date(year=int(year), month=int(month), day=int(day))
+            date = datetime.date(
+                year=int(year), month=int(month), day=int(day)
+
+            )
         else:
             date = datetime.date.today()
 
         return date
-    
+
     def get_day_calendar(self):
         """1日カレンダー情報の入った辞書を返す"""
         self.setup_calendar()

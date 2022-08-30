@@ -9,7 +9,6 @@
     <a href="{% url 'app:month_calendar_month' month_previous.year month_previous.month %}">前月</a>
     {{ month_current | date:"Y年m月" }}
     <a href="{% url 'app:month_calendar_month' month_next.year month_next.month %}">次月</a>
-    <a href="{% url 'app:create_suggestion' %}">予定の候補を追加</a>
 
     <table class="table">
         <thead>
@@ -24,11 +23,11 @@
             <tr>
                 {% for day in week %}
                     {% if now == day %}
-                        <td class="table-success">
+                        <td class="today">
                             {% else %}
                         <td>
                     {% endif %}
-                    <a href="{% url 'app:day_with_schedule' day.year day.month  day.day %}">
+                    <a href="{% url 'app:day_with_schedule' day.year day.month  day.day %}" class="today-url">
 
                 {% if month_current.month != day.month %}
                     {{ day | date:"m/d" }}
@@ -40,7 +39,7 @@
                 {% for schedule in schedule_list %}
                   {% if schedule.date == day %}
                   <a href="{% url 'app:update' schedule.pk %}">
-                    <div {% if schedule.is_confirmed %}class="confirmed-schedule"{% else %}class="non-confirmed-schedule"{% endif %}>
+                    <div {% if schedule.is_confirmed %}class="schedule confirmed-schedule"{% else %}class="schedule non-confirmed-schedule"{% endif %}>
                       {{ schedule.title }}
                     </div>
                   </a>

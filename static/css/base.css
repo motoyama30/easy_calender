@@ -1,0 +1,22 @@
+.navbar .nav-item .nav-link {
+  width: 150px;
+  margin-right: 20px;
+  text-align: center;
+  color: black;
+  border-bottom: solid 1.5px #262626;
+  transition: .3s;
+}
+
+.navbar .nav-item .nav-link:hover {
+  border-bottom: solid 1.5px gray;
+  color: gray;
+}
+
+.nav-item {
+  text-decoration: none;
+}
+
+
+.container {
+  margin-top: 30px;
+}
