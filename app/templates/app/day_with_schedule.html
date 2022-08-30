@@ -18,19 +18,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            {% for schedule in schedule_list %}
+        {% for schedule in schedule_list %}
+            <tr>
                 <td>
                     {{ schedule.start_time }} - {{ schedule.end_time }}
                 </td>
                 <td>
                     <a href="{% url 'app:update' schedule.pk %}">
                         {{ schedule.title }}
-                      </a>
+                      </a><br>
                     {{ schedule.memo }}<br>
                 </td>
-            {% endfor %}
-        </tr>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
     
