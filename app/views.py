@@ -1,13 +1,12 @@
 from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 from .forms import CreateSuggestionForm
 from .models import Schedule, Suggestion
 from . import mixins
-
 
 
 class MonthCalendar(mixins.MonthCalendarMixin, ListView):
@@ -22,7 +21,6 @@ class MonthCalendar(mixins.MonthCalendarMixin, ListView):
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
         return context
-
 
     def get_queryset(self):
         day = self.get_current_month()
@@ -136,7 +134,7 @@ class UpdateSchedule(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({"pk":self.kwargs.get("pk")})
+        context.update({"pk": self.kwargs.get("pk")})
         return context
 
 
