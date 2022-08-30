@@ -3,10 +3,27 @@ from django.db import models
 from django.utils import timezone
 
 
-class Schedule(models.Model):
-    """予定"""
+class Suggestion(models.Model):
+    """候補"""
     title = models.CharField('タイトル', max_length=50)
     memo = models.TextField('メモ', blank=True)
+    start_time = models.TimeField('開始時刻', default=datetime.time(10, 0, 0))
+    end_time = models.TimeField('終了時刻', default=datetime.time(10, 0, 0))
+
+    class Meta:
+        verbose_name = "候補"
+        verbose_name_plural = "候補一覧"
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Schedule(models.Model):
+    """予定"""
+    title = models.ForeignKey(
+        Suggestion, verbose_name='タイトル', on_delete=models.PROTECT
+    )
+    memo = models.TextField('メモ', null=True, blank=True)
     start_time = models.TimeField('開始時刻', default=datetime.time(10, 0, 0))
     end_time = models.TimeField('終了時刻', default=datetime.time(10, 0, 0))
     date = models.DateField('日付')
@@ -16,7 +33,6 @@ class Schedule(models.Model):
     def __str__(self) -> str:
         return f'{self.date}; {self.title}'
 
-
-# class Suggestion(models.Model):
-#     """候補"""
-#     title = models.CharField('タイトル', max_length=50)
+    class Meta:
+        verbose_name = "予定"
+        verbose_name_plural = "予定一覧"
