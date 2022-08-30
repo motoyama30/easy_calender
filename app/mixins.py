@@ -49,8 +49,10 @@ class MonthCalendarMixin(BaseCalendarMixin):
         year = self.kwargs.get('year')
         if month and year:
             month = datetime.date(year=int(year), month=int(month), day=1)
+            print('bb', month)
         else:
             month = datetime.date.today().replace(day=1)
+            print("aa:", month)
         return month
 
     def get_month_calendar(self):

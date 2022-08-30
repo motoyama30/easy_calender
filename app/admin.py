@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Schedule, Suggestion
 
-# Register your models here.
+
+admin.site.register(Schedule)
+admin.site.register(Suggestion)
