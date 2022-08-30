@@ -1,0 +1,33 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+    <a href="{% url 'app:day' day_previous.year day_previous.month  day_previous.day %}">{{ day_previous | date:"Y年m月d日" }}</a>
+    <a href="{% url 'app:day' day_next.year day_next.month  day_next.day %}">{{ day_next | date:"Y年m月d日" }}</a>    
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th colspan="2">The table header</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>The table body</td>
+                <td>with two columns</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ current_week_name }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ current_day | date:"d" }}</td>
+        </tr>
+        </tbody>
+    </table>
+    
+{% endblock %}
