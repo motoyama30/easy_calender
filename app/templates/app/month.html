@@ -1,4 +1,9 @@
 {% extends 'app/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/month.css' %}">
+{% endblock %}
 
 {% block content %}
     <a href="{% url 'app:month_calendar_month' month_previous.year month_previous.month %}">前月</a>
@@ -35,7 +40,9 @@
                 {% for schedule in schedule_list %}
                   {% if schedule.date == day %}
                   <a href="{% url 'app:update' schedule.pk %}">
-                    {{ schedule.title }}
+                    <div {% if schedule.is_confirmed %}class="confirmed-schedule"{% else %}class="non-confirmed-schedule"{% endif %}>
+                      {{ schedule.title }}
+                    </div>
                   </a>
                   {% endif %}
                 {% endfor %}
