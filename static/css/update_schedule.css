@@ -1,0 +1,33 @@
+.container{
+    /* background-color: rgb(197, 187, 187); */
+    margin: 20px auto 0;
+    max-width: 500px;
+}
+
+.head{
+    font-size: 24px;
+}
+
+.title{
+    margin-top: 24px;
+}
+
+.date{
+    margin-top: 12px;
+}
+
+.time{
+    margin-top: 12px;
+}
+
+.memo{
+    margin-top: 12px;
+}
+
+.is_confirmed{
+    margin-top: 12px;
+}
+
+h1{
+    text-align: center;
+}

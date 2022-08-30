@@ -1,6 +1,53 @@
 {% extends "app/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/update_schedule.css' %}">
+{% endblock %}
+
 {% block content %}
-<form action="" method="POST">{% csrf_token %}
+<div class="container">
+    <h1 class="head">日程の編集</h1>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="title">
+        <label>タイトル</label>
+        {{form.title}}
+      </div>
+      <div class="date">
+        <label for="">日付</label>
+        {{form.date}}
+      </div>
+      <div class="time">
+        <div class="start">
+            <label for="">開始時間:</label>
+            {{form.start_time}}
+        </div>
+        <div class="end">
+            <label for="">終了時間:</label>
+            {{form.end_time}}
+        </div>
+      </div>
+      <div class="memo">
+        <p>詳細</p>
+        {{form.memo}}
+      </div>
+      <div class="is_confirmed">
+        <label for="">確定</label>
+        {{form.is_confirmed}}
+      </div>
+
+      <input class="btn btn-primary" type="submit" value="更新" >
+      <a class = "btn btn-danger" href="{% url 'app:delete' pk %}" >削除</a>
+    
+    </form>
+</div>
+<!-- <form action="" method="POST">
+
+    
+    {% csrf_token %}
 
     <p id="title">タイトル</p>
     {{ form.title }}
@@ -17,7 +64,7 @@
     <input type="submit" value="更新">
     <a href="{% url 'app:delete' pk %}" >削除</a>
 
-</form>
+</form> -->
 
 
 {% endblock content %}
