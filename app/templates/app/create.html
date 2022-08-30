@@ -34,5 +34,17 @@
             });
         });
     </script>
-{% endblock %}
+    <script>
+      // 候補を選択したら他のフィールドにも値を設定
+      const suggestions = JSON.parse('{{ suggestions_json|safe }}');
+      const titleField = document.getElementById("id_title");
 
+      titleField.addEventListener("change", function() {
+        const chosenSuggestion = titleField.value;
+        const chosen = suggestions.filter((item) => item.pk == chosenSuggestion)[0];
+        document.getElementById("id_start_time").value = chosen.fields.start_time;
+        document.getElementById("id_end_time").value = chosen.fields.end_time;
+        document.getElementById("id_memo").value = chosen.fields.memo ?? chosen.fields.memo;
+      });
+    </script>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
@@ -97,6 +98,7 @@ class CreateSchedule(CreateView):
         return initial
 
     def form_valid(self, form):
+        # 重複する予定があるか検索
         new_date = form.cleaned_data.get("date")
         new_start_time = form.cleaned_data.get("start_time")
         new_end_time = form.cleaned_data.get("end_time")
@@ -119,9 +121,14 @@ class CreateSchedule(CreateView):
         else:
             return super().form_valid(form)
 
-
-# class CreateAlert(TemplateView):
-    # template_name: str = "app/create_alert.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        suggestions = Suggestion.objects.all()
+        suggestions_json = serializers.serialize("json", suggestions)
+        context.update({
+            "suggestions_json": suggestions_json,
+        })
+        return context
 
 
 class UpdateSchedule(UpdateView):

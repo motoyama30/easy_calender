@@ -46,7 +46,11 @@ urlpatterns = [
         'sample_day/<int:year>/<int:month>/<int:day>/',
         views.DayCalendar.as_view(),
         name='day'),
-    path('sample_day_schedule/', views.DayWithScheduleCalendar.as_view(), name='day_with_schedule'),
+    path(
+        'sample_day_schedule/',
+        views.DayWithScheduleCalendar.as_view(),
+        name='day_with_schedule'
+    ),
     path(
         'sample_day_schedule/<int:year>/<int:month>/<int:day>/',
         views.DayWithScheduleCalendar.as_view(),
