@@ -24,6 +24,3 @@ class CreateSuggestionView(CreateView):
     form_class = CreateSuggestionForm
     template_name: str = 'app/create_suggestion.html'
     success_url = reverse_lazy('app:month_calendar')
-
-    def form_valid(self, form):
-        return super().form_valid(form)

@@ -1,0 +1,23 @@
+.form-container {
+  margin: 20px auto 0;
+  max-width: 500px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.form-label {
+  margin-top: 20px;
+}
+
+.submit-btn {
+  margin: 12px 0;
+}
+
+.errorlist {
+  list-style: none;
+  color: red;
+  font-size: 12px;
+  padding: 0;
+}

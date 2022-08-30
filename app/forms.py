@@ -5,11 +5,6 @@ from .models import Suggestion
 
 
 class CreateSuggestionForm(ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__()
-    #     for field in self.fields.values():
-    #         field.widget.attrs['class'] = 'form-control'
-
     class Meta:
         model = Suggestion
         fields = ('title', 'start_time', 'end_time', 'memo')
@@ -31,8 +26,8 @@ class CreateSuggestionForm(ModelForm):
     def clean_end_time(self):
         start_time = self.cleaned_data['start_time']
         end_time = self.cleaned_data['end_time']
-        if end_time <= start_time:
+        if end_time < start_time:
             raise forms.ValidationError(
-                '終了時間は、開始時間よりも後にしてください'
+                '終了時間は開始時間よりも後に設定してください。'
             )
         return end_time
