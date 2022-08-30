@@ -1,0 +1,27 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<form action="" method="post">
+  {% csrf_token %}
+  <div class="col-sm-5">
+    <label for="id_title" class="form-label">タイトル</label>
+      {{form.title}}
+      {{form.title.errors}}
+  </div>
+  <div class="col-sm-3">
+    <label for="id_start_time" class="form-label">開始時間</label>
+    {{form.start_time}}
+  </div>
+  <div class="col-sm-3">
+    <label for="id_end_time" class="form-label">終了時間</label>
+    {{form.end_time}}
+  </div>
+  <div class="col-sm-5">
+    <label for="id_memo" class="form-label">詳細</label>
+    {{form.memo}}
+  </div>
+  <div class="col-sm-5">
+    <button type="submit" class="btn btn-primary col-sm-5">追加する</button>
+  </div>
+</form>
+{% endblock content %}

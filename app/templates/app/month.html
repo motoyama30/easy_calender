@@ -4,6 +4,7 @@
     <a href="{% url 'app:month_calendar_month' month_previous.year month_previous.month %}">前月</a>
     {{ month_current | date:"Y年m月" }}
     <a href="{% url 'app:month_calendar_month' month_next.year month_next.month %}">次月</a>
+    <a href="{% url 'app:create_suggestion' %}">予定の候補を追加</a>
 
     <table class="table">
         <thead>

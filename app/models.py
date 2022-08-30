@@ -1,6 +1,5 @@
 import datetime
 from django.db import models
-from django.utils import timezone
 
 
 class Suggestion(models.Model):
@@ -9,6 +8,7 @@ class Suggestion(models.Model):
     memo = models.TextField('メモ', blank=True)
     start_time = models.TimeField('開始時刻', default=datetime.time(10, 0, 0))
     end_time = models.TimeField('終了時刻', default=datetime.time(10, 0, 0))
+    is_confirmed = models.BooleanField('確定済み', default=True)
 
     class Meta:
         verbose_name = "候補"
@@ -27,7 +27,7 @@ class Schedule(models.Model):
     start_time = models.TimeField('開始時刻', default=datetime.time(10, 0, 0))
     end_time = models.TimeField('終了時刻', default=datetime.time(10, 0, 0))
     date = models.DateField('日付')
-    created_at = models.DateTimeField('作成日', default=timezone.now)
+    created_at = models.DateTimeField('作成日', auto_now_add=True)
     is_confirmed = models.BooleanField('確定したか', default=True)
 
     def __str__(self) -> str:
