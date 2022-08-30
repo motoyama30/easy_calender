@@ -12,8 +12,18 @@ urlpatterns = [
         name='month_calendar_month',
     ),
     path(
+        "create/<str:date>",
+        views.CreateSchedule.as_view(),
+        name="create"
+    ),
+    path(
+        "update/<int:pk>",
+        views.UpdateSchedule.as_view(),
+        name="update",
+    ),
+    path(
         'create_suggestion/',
-        views.CreateSuggestionView.as_view(),
+        views.CreateSuggestion.as_view(),
         name='create_suggestion'
     ),
 ]

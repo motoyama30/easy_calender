@@ -23,13 +23,22 @@
                             {% else %}
                         <td>
                     {% endif %}
+                    <a href="{% url 'app:create' day %}">
 
                 {% if month_current.month != day.month %}
                     {{ day | date:"m/d" }}
                 {% else %}
                     {{ day.day }}
                 {% endif %}
+              </a>
 
+                {% for schedule in schedule_list %}
+                  {% if schedule.date == day %}
+                  <a href="{% url 'app:update' schedule.pk %}">
+                    {{ schedule.title }}
+                  </a>
+                  {% endif %}
+                {% endfor %}
                 </td>
                 {% endfor %}
             </tr>
