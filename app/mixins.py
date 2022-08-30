@@ -141,7 +141,7 @@ class DayCalendarMixin(BaseCalendarMixin):
             date = datetime.date(year=int(year), month=int(month), day=int(day))
         else:
             date = datetime.date.today()
-
+        print(date)
         return date
     
     def get_day_calendar(self):
