@@ -64,16 +64,23 @@ class DayCalendar(mixins.DayCalendarMixin, TemplateView):
 
 
 class DayWithScheduleCalendar(mixins.DayWithScheduleMixin, TemplateView):
-    """スケジュール付きの週間カレンダーを表示するビュー"""
+    """1日のスケジュールを表示するビュー"""
     template_name = 'app/day_with_schedule.html'
     model = Schedule
     date_field = 'date'
+    context_object_name = "schedule_list"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         calendar_context = self.get_day_calendar()
         context.update(calendar_context)
         return context
+
+    def get_queryset(self):
+        day = self.get_day()
+        day = str(day).split("-")[2]
+        queryset = Schedule.objects.filter(date__day=day)
+        return queryset
 
 
 class CreateSchedule(CreateView):
