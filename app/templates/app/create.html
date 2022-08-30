@@ -1,18 +1,66 @@
 {% extends 'app/base.html' %}
+{% load static %}
 
 {% block extra_css %}
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/timedropper/1.0/timedropper.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/create_schedule.css' %}">
 {% endblock %}
+<div class="col-sm-12">
+    <label for="id_title" class="form-label">タイトル</label>
+      {{form.title}}
+      {{form.title.errors}}
+  </div>
 
 {% block content %}
 <form action="" method="POST">
   {% csrf_token %}
 
-  {{ form.as_p }}
-  <button type="submit" name="next" value="confirm">追加する</button>
+  <div class="container">
+    <h1 class="head">日程の追加</h1>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="title">
+        <label>タイトル</label>
+        {{form.title}}
+        {{form.title.errors}}
+        <p>
+            <!-- <a class="btn btn-danger" id="add_schedule" href="{% url 'app:create_suggestion' %}">予定の候補を追加</a> -->
+            <a id="add_schedule" href="{% url 'app:create_suggestion' %}">予定の候補を追加</a>
+        </p>
+      </div>
+      <div class="date">
+        <label for="">日付</label>
+        {{form.date}}
+        {{form.date.errors}}
+      </div>
+      <div class="time">
+        <div class="start">
+            <label for="">開始時間:</label>
+            {{form.start_time}}
+            {{form.start_time.errors}}
+        </div>
+        <div class="end">
+            <label for="">終了時間:</label>
+            {{form.end_time}}
+            {{form.end_time.errors}}
+        </div>
+      </div>
+      <div class="memo">
+        <p>詳細</p>
+        {{form.memo}}
+        {{form.memo.errors}}
+      </div>
+      <div class="is_confirmed">
+        <label for="">確定</label>
+        {{form.is_confirmed}}
+        {{form.is_confirmed.errors}}
+      </div>
+
+  <button type="submit" name="next" value="confirm" class="btn btn-primary">日程の追加</button>
 
 </form>
+</div>
 {% endblock content %}
 
 {% block extrajs%}

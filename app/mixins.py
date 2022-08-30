@@ -113,7 +113,7 @@ class WeekWithScheduleMixin(WeekCalendarMixin):
             '{}__range'.format(self.date_field): (start, end)
         }
         # 例えば、Schedule.objects.filter(date__range=(1日, 31日)) になる
-        queryset = self.model.objects.filter(**lookup)
+        queryset = self.model.objects.filter(**lookup).order_by('start_time')
 
         # {1日のdatetime: 1日のスケジュール全て, 2日のdatetime: 2日の全て...}のような辞書を作る
         day_schedules = {day: [] for day in days}
@@ -144,7 +144,7 @@ class DayCalendarMixin(BaseCalendarMixin):
             )
         else:
             date = datetime.date.today()
-
+        print(date)
         return date
 
     def get_day_calendar(self):
