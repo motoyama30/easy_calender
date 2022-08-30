@@ -42,4 +42,23 @@ urlpatterns = [
         views.DayWithScheduleCalendar.as_view(),
         name='day_with_schedule'
     ),
+
+    path(
+        "create/",
+        views.CreateSchedule.as_view(),
+        name="create"
+    ),
+
+    path(
+        "update/<int:pk>",
+        views.UpdateSchedule.as_view(),
+        name="update",
+    ),
+    path(
+        "delete/<int:pk>",
+        views.DeleteSchedule.as_view(),
+        name="delete"
+    )
+
+    
 ]

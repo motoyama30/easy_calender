@@ -9,7 +9,9 @@ from .models import Schedule, Suggestion
 from . import mixins
 
 
+
 class MonthCalendar(mixins.MonthCalendarMixin, ListView):
+
     model = Schedule
     template_name: str = 'app/month.html'
     ordering = 'date'
@@ -20,6 +22,7 @@ class MonthCalendar(mixins.MonthCalendarMixin, ListView):
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
         return context
+
 
     def get_queryset(self):
         day = self.get_current_month()
@@ -63,16 +66,23 @@ class DayCalendar(mixins.DayCalendarMixin, TemplateView):
 
 
 class DayWithScheduleCalendar(mixins.DayWithScheduleMixin, TemplateView):
-    """スケジュール付きの週間カレンダーを表示するビュー"""
+    """1日のスケジュールを表示するビュー"""
     template_name = 'app/day_with_schedule.html'
     model = Schedule
     date_field = 'date'
+    context_object_name = "schedule_list"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         calendar_context = self.get_day_calendar()
         context.update(calendar_context)
         return context
+
+    def get_queryset(self):
+        day = self.get_day()
+        day = str(day).split("-")[2]
+        queryset = Schedule.objects.filter(date__day=day)
+        return queryset
 
 
 class CreateSchedule(CreateView):
@@ -124,9 +134,20 @@ class UpdateSchedule(UpdateView):
     )
     success_url = reverse_lazy("app:month_calendar")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({"pk":self.kwargs.get("pk")})
+        return context
+
 
 class CreateSuggestion(CreateView):
     model = Suggestion
     form_class = CreateSuggestionForm
     template_name: str = 'app/create_suggestion.html'
     success_url = reverse_lazy('app:month_calendar')
+
+
+class DeleteSchedule(DeleteView):
+    template_name: str = "app/delete.html"
+    model = Schedule
+    success_url = reverse_lazy("app:month_calendar")
