@@ -23,7 +23,7 @@
                             {% else %}
                         <td>
                     {% endif %}
-                    <a href="{% url 'app:create' day %}">
+                    <a href="{% url 'app:day_with_schedule' day.year day.month  day.day %}">
 
                 {% if month_current.month != day.month %}
                     {{ day | date:"m/d" }}
